@@ -20,5 +20,5 @@ require.config({
 });
 
 define(["Enaza","jQuery","underscore"],function(Enaza, $, _){
-	Enaza.init("maptrix", _params);
+	Enaza.init("default", _params);
 });
