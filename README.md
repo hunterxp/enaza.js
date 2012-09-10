@@ -30,7 +30,7 @@ require.config({
 });
 
 define(["Enaza","jQuery","underscore"],function(Enaza, $, _){
-	Enaza.init("maptrix", _params);
+	Enaza.init("default", _params);
 });
 ````
 
@@ -131,7 +131,7 @@ define(['jQuery', 'Enaza', 'modules/highlight/ext/default'], function($, Enaza){
 ````
 
 ###6. Use safety coding ;) (Используй безопасный кодинг)
-Описаание будет здесь очень скоро
+Описание будет здесь очень скоро
 
 ###7. Make minify file with node.js (Создавай минификационные(обфусцированный) файлы с node.js)
-Описаание будет здесь очень скоро
+Описание будет здесь очень скоро
