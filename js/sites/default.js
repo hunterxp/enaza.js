@@ -1,7 +1,7 @@
 //default params
 var _params = {
 	core 		: [],
-	models 		: ["models/example.model"],
+	models 		: [],
 	modules 	: ["modules/fullAjax/module","modules/highlight/module"],
 	extensions 	: ["modules/fullAjax/ext/default", "modules/highlight/ext/default"]
 };
@@ -14,11 +14,11 @@ require.config({
 		underscore	: "external/underscore-min",
 		Enaza		: "enaza.bundle",
 		external 	: "external",
-		models 		: "models/default",
+		models 		: "models",
 		modules 	: "modules"
 	}
 });
 
 define(["Enaza","jQuery","underscore"],function(Enaza, $, _){
-	Enaza.init("default", _params);
+	Enaza.init("maptrix", _params);
 });

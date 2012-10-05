@@ -19,7 +19,12 @@ define(['jQuery', 'Enaza', 'external/highlight.min'], function($, Enaza){
 		/**
 		 * DOM is ready
 		 */
-		pub.domReady	= function(){};
+		pub.domReady	= function(){
+			// _highlight = window.hljs;
+			// _highlight.initHighlightingOnLoad()
+
+			// $(_options.containers).each(function(i, e) {_highlight.highlightBlock(e)});
+		};
 		
 		return pub;
 		

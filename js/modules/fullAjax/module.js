@@ -15,12 +15,13 @@ define(['jQuery', 'Enaza', 'external/jquery.history'], function($, Enaza){
 				preloader 	: false,
 				scrollToTop	: false,
 				title 		: ""
-			}
+			},
 		};
 
 		var _isIE 			= $.browser.msie; // Проверка является ли браузер ие
 		var _ajax 			= Enaza.Core.ajax; // аякс запрос 
 		var _obj_trigger 	= []; // Масив созданных ajax обьектов
+		var _debug 			= false;
 
 		var priv			= {}; // Приватные методы модуля
 
@@ -40,11 +41,11 @@ define(['jQuery', 'Enaza', 'external/jquery.history'], function($, Enaza){
 			this.scrollToTop = data.scrollToTop; 
 			this.data        = null;
 			this.eventStart  = function () {
-				$(window).trigger(name + '.start', data);
+				$(window).trigger(pub.name + '.start', data);
 			};
 			
 			this.eventReady  = function () {             
-				$(window).trigger(name + '.ready', {}); 
+				$(window).trigger(pub.name + '.ready', {}); 
 			};
 		};
 	
@@ -175,6 +176,7 @@ define(['jQuery', 'Enaza', 'external/jquery.history'], function($, Enaza){
 		};
 
 
+
 		// Возвращает первый обьект ajaxUrl 
 		priv.globalAjaxUrl = function () {
       	  return _obj_trigger[0]; 
@@ -200,6 +202,35 @@ define(['jQuery', 'Enaza', 'external/jquery.history'], function($, Enaza){
 			});
 		};
 
+		/**
+		 * Статистика перехода по ветринам 
+		 */
+		priv.statisticUrl  = function (el) {
+			var url = el.data('href') || false;
+			var data    = {'is_ajax':true}; 
+			if (url) {
+				console.log(url)
+				_ajax(data,{url: url, type: 'GET'});
+			}
+		};
+
+		/**
+		 * Небольшой дебаг работы функций 
+		 */
+		priv.debug = function () {
+			if (_debug) {
+
+				$(window).on(pub.name + '.start',function () {
+					console.info('DEBUG ', pub.name,' : ' , 'event start');
+				});
+
+
+				$(window).on(pub.name + '.ready',function () {
+					console.info('DEBUG ', pub.name,' : ' , 'event ready');
+				});
+
+			}
+		};
 
 		/**
 		 * PUBLIC 
@@ -229,11 +260,13 @@ define(['jQuery', 'Enaza', 'external/jquery.history'], function($, Enaza){
  			var number = _obj_trigger.length - 1 ;
 
 			// Переход по AjaxUrl
-			$(document).on(settings.event, settings.element, function(e) {
+			Enaza.Events.bind(settings.element, settings.event, function(e) {
 					e.preventDefault();
 
 					var _this 	= $(this);
-					var url		= _obj_trigger[number].getHref(_this); 
+					var url		= _obj_trigger[number].getHref(_this);
+
+					priv.statisticUrl(_this);  
 
 					if ((url.indexOf('http://' + host)>-1 || url.indexOf('http://') == -1) && !e.ctrlKey) {
 					  _obj_trigger[number].browserUrl(url, number);
@@ -242,6 +275,7 @@ define(['jQuery', 'Enaza', 'external/jquery.history'], function($, Enaza){
 					}
 			});
 		};
+
 
 
 		/**
@@ -262,6 +296,9 @@ define(['jQuery', 'Enaza', 'external/jquery.history'], function($, Enaza){
               //вызов конструктора
               pub.createAjaxUrl(settings);
           });   
+
+
+          priv.debug();
 		};
 
 		/**

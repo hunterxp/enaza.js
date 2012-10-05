@@ -2,13 +2,33 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Enaza.JS v 1.0.2</title>
-		<link rel="stylesheet" href="css/default.min.css">
+		<link rel="stylesheet" href="/css/default.min.css">
 		<script data-main="/js/sites/default" src="/js/external/require.js" type="text/javascript"></script>
 
 	</head>
 <body>
+	<h1>Enaza.JS v 1.0.2</h1>
 
-	<h3>Пример работы тестового модуля</h3>
+	<h3>Git инициализация</h3>
+	<div class="bash">
+	<pre><code>
+git clone git@dev.enaza.ru:enaza.js
+	</code></pre>
+</div>
+
+	<h3>Структура проекта</h3>
+	<pre><code>
+/js/
+	/external/
+	/models/
+	/modules/
+	/sites/
+	enaza.bundle.js
+	</code></pre>
+
+	<h3>Конфигурация</h3>
+	<p>В директорию %js_path%/sites/ кладем необходимый для инициализации приложения файл следующего содержания</p>
+
 	<div class="javascript">
 		<pre><code>
 //default params
@@ -38,5 +58,130 @@ define(["Enaza","jQuery","underscore"],function(Enaza, $, _){
 		</code></pre>
 	</div>	
 	<i>/sites/default.js</i>
+
+
+
+<h3>Модуль</h3>
+<p>Mодуль — функционально законченный фрагмент программы, оформленный в виде отдельного файла с исходным кодом или поименованной непрерывной её части, предназначенный для использования в других программах. Модули позволяют разбивать сложные задачи на более мелкие в соответствии с принципом модульности. Обычно проектируются таким образом, чтобы предоставлять программистам удобную для многократного использования функциональность (интерфейс) в виде набора функций, классов, констант. Модули могут объединяться в пакеты и, далее, в библиотеки.</p>
+	<div class="javascript">
+		<pre><code>
+//Укажем зависимости модуля и возвращаемый после загрузки контекст
+define(['jQuery', 'Enaza', 'external/highlight.min'], function($, Enaza){
+//вернем модуль
+return Enaza.Modules.highlight  = (function(pub, $) {
+
+	var _options = {
+		containers : "pre code"
+	}
+	,_highlight = {};
+
+	//Все переменные, объекты, массивы с префиксом pub - будут возвращены в контекст Enaza.Modules.*
+	pub.name 		= "highlight";
+
+	/**
+	 * Модуль загружен, но еще не проинициализирован
+	 */
+	pub.init 		= function(){
+
+	};
+	
+	/**
+	 * Модуль загружен, проинициализирован и дом - готов
+	 */
+	pub.domReady	= function(){
+		//_highlight = window.hljs;
+		//_highlight.initHighlightingOnLoad()
+
+		//$(_options.containers).each(function(i, e) {_highlight.highlightBlock(e)});
+	};
+	
+	return pub;
+	
+}(Enaza.Modules.highlight || {}, jQuery));
+
+});
+	</code></pre>
+	</div>	
+	<i>/modules/highlight/module.js</i>
+
+
+<h3>Расширения</h3>
+<p>В текущем понимании, расширение - это класс, отдельный модуль, который унаследуется от основного модуля, и может применять методы и свойства родительского модуля, а так же изменить его конструкцию и поведение. Применимо для когда есть необходимость внести изменения в логику или поведение конкретного модуля для разных проектов</p>
+	<div class="javascript">
+		<pre><code>
+//Укажем зависимости модуля и возвращаемый после загрузки контекст
+define(['jQuery', 'Enaza', 'modules/highlight/module'], function($, Enaza){
+//вернем модуль
+return Enaza.Modules.highlight  = (function(pub, $) {
+
+	var _options = {
+		containers : "pre code"
+	}
+	,_highlight = {};
+
+	//Все переменные, объекты, массивы с префиксом pub - будут возвращены в контекст Enaza.Modules.*
+	pub.name 		= "highlight";
+
+	/**
+	 * Модуль загружен, но еще не проинициализирован
+	 */
+	pub.init 		= function(){
+
+	};
+	
+	/**
+	 * Модуль загружен, проинициализирован и дом - готов
+	 */
+	pub.domReady	= function(){
+		_highlight = window.hljs;
+		_highlight.initHighlightingOnLoad()
+
+		$(_options.containers).each(function(i, e) {_highlight.highlightBlock(e)});
+	};
+	
+	return pub;
+	
+}(Enaza.Modules.highlight || {}, jQuery));
+
+});
+	</code></pre>
+	</div>	
+	<i>/modules/highlight/module.js</i>
+
+
+<h3>Модель</h3>
+	<p>Данный компонент является частью из общей парадигмы MVC - а именно обеспечивает взаимосвязь JS и AJAX интерфейсов, подготовки данных, а так же обеспечивает их обработку</p>
+	<div class="javascript">
+		<pre><code>
+define(['jQuery', 'Enaza'], function($, Enaza){
+	
+	return Enaza.Models.Instrument = (function(pub, $) {
+		
+		pub.name 		= "instrument";
+		
+		pub.inviteFriend	= function(_mailList){
+			var _ajax 		= Enaza.Core.ajax;
+			var _options 	= {
+				url 	: "/instrument/inviteFriend/",
+				type	: "POST",
+				dataType: 'json'
+			};
+			var _data 		= {
+				mailList: _mailList,
+			};
+			
+			return _ajax(_data,_options);
+		};
+		
+		return pub;
+		
+	}(Enaza.Models.Instrument || {}, jQuery));
+
+});
+	</code></pre>
+	</div>	
+	<i>/models/instrument.model.js</i>
+
+
 </body>
 </html>

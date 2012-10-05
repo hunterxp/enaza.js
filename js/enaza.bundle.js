@@ -217,7 +217,7 @@ define(['jQuery'], function(){
                 
 			pub.init 		= function(site, options) {
 				$.extend(true, _options, options);
-                _redefine(options.types);
+                //_redefine(options.types);
 			};
 
 			pub.log 		= function(message){
@@ -251,10 +251,10 @@ define(['jQuery'], function(){
 			
 			pub.events		= {};
 			
+			
 			pub.init 		= function(site, options) {
 				//extend default params
 				$.extend(true, _options, options);
-				
 			};
 			
 			/**
@@ -264,7 +264,7 @@ define(['jQuery'], function(){
  			 * @param {Function}	callback	- callback function
 			 */
 			pub.bind 		= function(object, event, callback){
-				$(object).live(event, callback); 
+				$(object).live(event, callback);
 				var calls = pub.events || (events = {});
 				var list  = calls[event] || (calls[event] = []);
 				list.push([object, event]);
@@ -310,6 +310,18 @@ define(['jQuery'], function(){
 				}
 			};
 			
+			pub.add 		= function(eventName, callback){
+				return pub.events[eventName] = callback;
+			};
+			
+			pub.call 		= function(eventName, data){
+				return pub.events[eventName](data);
+			};
+			
+			pub.remove 		= function(eventName){
+				delete pub.events[eventName];
+			}
+			
 			return pub;
 			
 		}(Enaza.Events || {}, jQuery));
@@ -339,6 +351,25 @@ define(['jQuery'], function(){
 			return pub;
 			
 		}(Enaza.Extensions || {}, jQuery));
+		
+		
+		Enaza.Utils 		= (function(pub, $) {
+			
+			pub.unixToHuman 	= function(d){
+				if(typeof d === 'number') d = new Date(d);
+				if(!(d instanceof Date)) return d;
+				function pad(n){return n<10 ? '0'+n : n}
+				return pad(d.getHours()) + ":"
+						+ pad(d.getMinutes()) + ":"
+						+ pad(d.getSeconds());
+				
+			
+			};
+			
+			
+			return pub;
+		
+		}(Enaza.Utils || {}, jQuery));
 		
 		
 	return window.Enaza;
